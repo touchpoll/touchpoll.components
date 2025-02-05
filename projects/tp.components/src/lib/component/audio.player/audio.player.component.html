@@ -1,0 +1,27 @@
+<div class="container-main-controls">
+ <button mat-icon-button class=""  aria-label="Play stop button" (click)="playPause()">
+  <mat-icon [svgIcon]="isPlay() ? 'iconPauseBlue18' : 'iconPlayBlue18' "/>
+ </button>
+ <div class="container-canvas">
+  <div class="container-top-info" [style.max-width.px]="canvasWidth()">
+   <span [title]="fileName()">{{fileName()}}</span>
+   <span class="label-time-left">{{leftTime() | numberToTime}}</span>
+  </div>
+  <canvas [height]="canvasHeight()" [width]="canvasWidth()" #canvasElement (click)="onCanvasClick($event)"></canvas>
+
+ </div>
+ <div class="container-buttons-manage">
+  @if (canRemove()) {
+   <button mat-icon-button class="ms-button-icon-244" aria-label="delete audio file" title="Remove file" (click)="removeClick.emit()">
+    <mat-icon svgIcon="iconTrash" ></mat-icon>
+   </button>
+  }
+  @if (canSave()) {
+   <a mat-icon-button [href]=url() target="_blank" aria-label="Save file ">
+    <mat-icon svgIcon="iconSave"></mat-icon>
+   </a>
+  }
+ </div>
+</div>
+
+

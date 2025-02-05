@@ -1,0 +1,27 @@
+{
+  "name": "@touchpoll/tp-component",
+  "version": "0.0.1",
+  "description": "component for touchpoll ui ix. framework angular",
+  "license": "MIT",
+  "peerDependencies": {
+    "@angular/common": ">=18.0.0",
+    "@angular/core": ">=18.0.0",
+    "@angular/material": ">=18.0.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "author": {
+    "name": "Glib Stepenko"
+  },
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "angular",
+    "angular library",
+    "component",
+    "touchpoll"
+  ]
+}

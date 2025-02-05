@@ -1,0 +1,37 @@
+.container-main{
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-end;
+}
+
+.container-top-info{
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5em;
+  font-size: 0.8em;
+  margin-bottom: 0.25em;
+}
+
+.container-top-info span {
+  &:first-child{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
+.container-main-controls{
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-end;
+}
+
+canvas{
+  padding-bottom: 0.5em;
+}
+
+.container-buttons-manage{
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+}
