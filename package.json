@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "app.start": "ng serve test.app --port 4401",
+    "app.start": "ng serve test.app --port 4401 --no-hmr",
     "app.build": "ng build test.app",
     "app.test": "ng test test.app",
     "lib.build": "ng build tp.components --configuration production",

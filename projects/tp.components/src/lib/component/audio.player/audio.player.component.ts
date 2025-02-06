@@ -88,7 +88,11 @@ export class AudioPlayerComponent implements OnDestroy {
        this.#source.onended = ( ) => this.stop();
        this.#source.buffer = fileBuffer;
        this.#source.connect(this.#audioContext.destination);
-       this.#source.start(0,  playPosition );
+       if (this.#audioContext?.state !== 'running') {
+         this.#source.start(0,  playPosition );
+       } else {
+         this.#audioContext.suspend();
+       }
      }),
      takeUntilDestroyed(destroyRef)
     ).subscribe();

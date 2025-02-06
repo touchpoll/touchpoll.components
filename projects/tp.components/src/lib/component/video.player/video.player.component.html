@@ -1,0 +1,11 @@
+@if (fileUrl(); as fileUrl) {
+  <video controls [width]="width()">
+    <source [src]="fileUrl" />
+  </video>
+
+  @if (canRemove()) {
+    <button mat-icon-button aria-label="remove file" (click)="onRemoveClick.emit();" class="button-remove">
+     <mat-icon svgIcon="iconTrash"/>
+    </button>
+  }
+}
