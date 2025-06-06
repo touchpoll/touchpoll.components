@@ -1,0 +1,7 @@
+<a mat-button [href]="fileUrl()" [msSaveAs]="fileName()">{{ fileName() }}</a>
+@if (canRemove()) {
+ <button mat-icon-button aria-label="remove file" (click)="onRemoveClick.emit();">
+  <mat-icon>delete</mat-icon>
+ </button>
+}
+
