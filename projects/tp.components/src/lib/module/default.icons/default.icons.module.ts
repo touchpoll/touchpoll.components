@@ -12,7 +12,7 @@ export class DefaultIconsModule {
     const matIconRegistry = inject(MatIconRegistry);
     const platformId = inject(PLATFORM_ID) as string;
     for (const [name, svgText] of Object.entries(defaultIcons24)) {
-      const iconText: string =  `<svg viewBox="0 0 24 24">${isPlatformServer(platformId) ? '' : svgText}</svg>`;
+      const iconText: string =  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">${isPlatformServer(platformId) ? '' : svgText}</svg>`;
       matIconRegistry.addSvgIconLiteral(name, domSanitizer.bypassSecurityTrustHtml(iconText));
     }
     
@@ -22,3 +22,4 @@ export class DefaultIconsModule {
     }
   }
 }
+//

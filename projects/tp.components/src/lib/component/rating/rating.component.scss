@@ -1,0 +1,32 @@
+button{
+  -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+  filter: grayscale(100%);
+  opacity: 0.4;
+}
+
+.active {
+  -webkit-filter: unset; /* Safari 6.0 - 9.0 */
+  filter: unset;
+  opacity: unset;
+}
+
+
+/*
+  ##Device = Most of the Smartphones Mobiles (Portrait)
+  ##Screen = B/w 320px to 479px
+*/
+
+@media (min-width: 320px) and (max-width: 480px) {
+
+  :host ::ng-deep {
+    .mat-mdc-icon-button.mat-mdc-button-base{
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      margin: 2px;
+    }
+  }
+
+}
+
+

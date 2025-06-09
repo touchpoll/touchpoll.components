@@ -1,0 +1,9 @@
+@for (val of array(); let index = $index; track index;) {
+ <button
+  [style.color]="color()"
+  mat-icon-button class="default"
+  [class.active]="(internalValue() >= 0 && (index + 1 <= internalValue())) || (activeHoverIndex >= index +1) "
+  (click)="onClick(index + 1)" (mouseenter)="onMouseenter(index+1)" (mouseleave)="onMouseleave()">
+  <mat-icon svgIcon="iconStar" aria-label="set rating"/>
+ </button>
+}
