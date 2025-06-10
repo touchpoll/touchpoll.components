@@ -7,6 +7,7 @@
     "app.build": "ng build test.app",
     "app.test": "ng test test.app",
     "lib.build": "ng build tp.components --configuration production",
+    "lib.pack": "rimraf ./dist/tp.components && npm run lib.build && cd dist/tp.components && npm pack",
     "lib.test": "ng test tp.components",
     "lib.npm.publish": "cd dist/tp.components && npm publish",
     "serve:ssr:test.app": "node dist/test.app/server/server.mjs"
