@@ -1,6 +1,6 @@
 {
   "name": "@touchpoll/tp-component",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "component for touchpoll ui ix. framework angular",
   "license": "MIT",
   "peerDependencies": {

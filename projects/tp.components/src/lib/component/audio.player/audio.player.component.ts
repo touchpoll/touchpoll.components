@@ -1,5 +1,5 @@
 import {booleanAttribute, ChangeDetectionStrategy, Component, computed, DestroyRef, effect, ElementRef, inject, input, OnDestroy, output, PLATFORM_ID, signal, ViewChild} from '@angular/core';
-import {CommonModule, isPlatformBrowser, isPlatformServer} from '@angular/common';
+import { CommonModule, isPlatformBrowser, isPlatformServer } from '@angular/common';
 import {combineLatest, filter, from, interval, mergeMap, tap} from 'rxjs';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
