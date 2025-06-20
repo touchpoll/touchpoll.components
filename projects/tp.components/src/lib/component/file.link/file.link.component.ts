@@ -1,15 +1,16 @@
 import {booleanAttribute, ChangeDetectionStrategy, Component, input, output} from '@angular/core';
-import {MatAnchor, MatIconButton} from '@angular/material/button';
+import {MatAnchor, MatButton, MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {SaveAsDirective} from '../../directive/save.as/save.as.directive';
 
 @Component({
-  selector: 'ms-file-link',
+  selector: 'tp-file-link',
   imports: [
     MatAnchor,
     MatIcon,
     SaveAsDirective,
     MatIconButton,
+    MatButton,
   ],
   templateUrl: './file.link.component.html',
   styleUrl: './file.link.component.scss',
