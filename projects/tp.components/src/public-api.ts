@@ -8,4 +8,6 @@ export * from './lib/component/file.link/file.link.component';
 export * from './lib/component/rating/rating.component';
 export * from './lib/pipe/number.to.time/number.to.time.pipe';
 
+export {computedAsync} from './lib/function/computed.async';
+
 
