@@ -1,4 +1,4 @@
-import {Component, effect, signal} from '@angular/core';
+import {Component, signal} from '@angular/core';
 import {MatButton} from '@angular/material/button';
 import {AudioPlayerComponent} from '../../../tp.components/src/lib/component/audio.player/audio.player.component';
 import {VideoPlayerComponent} from '../../../tp.components/src/lib/component/video.player/video.player.component';
@@ -26,13 +26,6 @@ export class AppComponent {
   idComputed = computedAsync(() => of(this.idSignalTest()));
   
   controlRating = new FormControl<number>({value: 2, disabled: false}, {nonNullable: true});
-  
-  constructor() {
-    effect(() => {
-      console.log('idComputed', this.idComputed())
-    });
-  }
-  
   run(): void{
     var x = document.getElementById("myAudio");
     // @ts-ignore

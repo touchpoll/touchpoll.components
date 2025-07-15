@@ -1,12 +1,12 @@
 import {booleanAttribute, ChangeDetectionStrategy, Component, computed, DestroyRef, effect, ElementRef, inject, input, OnDestroy, output, PLATFORM_ID, signal, ViewChild} from '@angular/core';
-import { CommonModule, isPlatformBrowser, isPlatformServer } from '@angular/common';
-import {combineLatest, filter, from, interval, mergeMap, tap} from 'rxjs';
+import {CommonModule, isPlatformBrowser, isPlatformServer} from '@angular/common';
+import {filter, firstValueFrom, interval} from 'rxjs';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {HttpClient} from '@angular/common/http';
 import {NumberToTimePipe} from '../../pipe/number.to.time/number.to.time.pipe';
 import {DefaultIconsModule} from '../../module/default.icons/default.icons.module';
-import {takeUntilDestroyed, toObservable} from '@angular/core/rxjs-interop';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 const getAudioContext =  () => {
   // @ts-ignore
@@ -63,48 +63,25 @@ export class AudioPlayerComponent implements OnDestroy {
   #source!: AudioBufferSourceNode;
   #offsetPlay = 0;
   #canvas!: ElementRef<HTMLCanvasElement>;
-  readonly #playStart =signal<number>(0);
-  readonly #platformId = inject(PLATFORM_ID) as string;
+  #audioBuffer: AudioBuffer | null = null;
+  readonly #playStart =signal<number | null>(null);
+  readonly #platformId = inject<string>(PLATFORM_ID);
+  readonly #http = inject(HttpClient);
   constructor() {
-    const http = inject(HttpClient);
     const destroyRef = inject(DestroyRef);
 
-    const audioContext$ = toObservable(this.url).pipe(
-     filter(() => isPlatformBrowser(this.#platformId)),
-     mergeMap(url => http.get(url, {responseType: 'arraybuffer'})),
-     mergeMap(fileBuffer =>  from(decodeAudioData(fileBuffer) ))
-    );
+    effect( async () => {
+      const playPosition = this.#playStart();
+      if (playPosition === null) {
+        return;
+      }
+      await this.#playFrom(playPosition);
+    });
 
-    combineLatest([
-     audioContext$,
-     toObservable(this.#playStart)
-    ]).pipe(
-     tap(([fileBuffer, playPosition]) => {
-       this.stop();
-       this.#offsetPlay = playPosition;
-       this.#audioContext = getAudioContext();
-       this.#audioContext.onstatechange = () => this.isPlay.set(this.#audioContext?.state === 'running')
-       this.#source = this.#audioContext.createBufferSource();
-       this.#source.onended = ( ) => this.stop();
-       this.#source.buffer = fileBuffer;
-       this.#source.connect(this.#audioContext.destination);
-       if (this.#audioContext?.state !== 'running') {
-         this.#source.start(0,  playPosition );
-       } else {
-         this.#audioContext.suspend();
-       }
-     }),
-     takeUntilDestroyed(destroyRef)
-    ).subscribe();
-    
     interval(500).pipe(
      filter(() => this.isPlay()),
      takeUntilDestroyed(destroyRef)
-    ).subscribe({
-      next: () => {
-        this.position.set(!this.#audioContext ? 0 : this.#audioContext.currentTime + this.#offsetPlay);
-      }
-    });
+    ).subscribe(() => this.position.set(!this.#audioContext ? 0 : this.#audioContext.currentTime + this.#offsetPlay));
 
     effect(() => {
       if (this.position() > 0) {
@@ -138,6 +115,25 @@ export class AudioPlayerComponent implements OnDestroy {
       }
     }
   }
+  
+  onCanvasClick(event: MouseEvent) {
+    const xClick = (event.clientX - this.#canvas.nativeElement.getBoundingClientRect().left) * this.duration() / this.canvasWidth();
+    this.#playStart.set(xClick);
+  }
+  
+  async #loadAudioContext(url: string): Promise<AudioBuffer | null> {
+    if (!isPlatformBrowser(this.#platformId)) {
+      return null ;
+    } else {
+      try {
+        const fileBuffer = await firstValueFrom(this.#http.get(url, {responseType: 'arraybuffer'}))
+        return await decodeAudioData(fileBuffer)
+      } catch (e) {
+        console.error(e);
+        return null;
+      }
+    }
+  }
 
   #refreshCanvas(): void {
     const visualData = this.visualData();
@@ -159,11 +155,19 @@ export class AudioPlayerComponent implements OnDestroy {
       return acc + step;
     }, 0);
   }
-  
-  onCanvasClick(event: MouseEvent) {
-    if (this.isPlay()) {
-      const xClick = (event.clientX - this.#canvas.nativeElement.getBoundingClientRect().left) * this.duration() / this.canvasWidth();
-      this.#playStart.set(xClick);
+
+  async #playFrom(playPosition: number): Promise<void> {
+    if (!this.#audioBuffer) {
+      this.#audioBuffer = await this.#loadAudioContext(this.url());
     }
+    this.stop();
+    this.#offsetPlay = playPosition;
+    this.#audioContext = getAudioContext();
+    this.#audioContext.onstatechange = () => this.isPlay.set(this.#audioContext?.state === 'running')
+    this.#source = this.#audioContext.createBufferSource();
+    this.#source.onended = ( ) => this.stop();
+    this.#source.buffer = this.#audioBuffer;
+    this.#source.connect(this.#audioContext.destination);
+    this.#source.start(0,  playPosition );
   }
 }
